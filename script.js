@@ -1,9 +1,9 @@
-// Load from localStorage or initialize empty
-let users = new Set(JSON.parse(localStorage.getItem("users")) || []);
-let todos = new Set(JSON.parse(localStorage.getItem("todos")) || []);
+// --- Load from localStorage or start new ---
+let users = new Set(JSON.parse(localStorage.getItem("users") || "[]"));
+let todos = new Set(JSON.parse(localStorage.getItem("todos") || "[]"));
 let currentUser = localStorage.getItem("currentUser") || null;
 
-// --- Save helpers ---
+// --- Save Helpers ---
 function saveUsers() {
   localStorage.setItem("users", JSON.stringify(Array.from(users)));
 }
@@ -28,7 +28,7 @@ function signup() {
     return;
   }
 
-  // check duplicates
+  // Check for duplicates
   for (let u of users) {
     const parsed = JSON.parse(u);
     if (parsed.username === username) {
@@ -90,22 +90,21 @@ function renderTodos() {
     const li = document.createElement("li");
     li.textContent = t;
 
-// Delete button
-const delBtn = document.createElement("button");
-delBtn.textContent = "❌";
-delBtn.style.marginLeft = "10px";
-// delBtn.style.background = "red";
-delBtn.style.color = "white";
-delBtn.style.border = "none";
-delBtn.style.borderRadius = "50%";
-delBtn.style.cursor = "pointer";
-delBtn.style.width = "25px";   // small size
-delBtn.style.height = "25px";  // small size
-delBtn.style.fontSize = "14px";
-delBtn.style.display = "inline-flex";
-delBtn.style.alignItems = "center";
-delBtn.style.justifyContent = "center";
-
+    // Delete button
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "❌";
+    delBtn.style.marginLeft = "10px";
+    delBtn.style.background = "#e74c3c";
+    delBtn.style.color = "white";
+    delBtn.style.border = "none";
+    delBtn.style.borderRadius = "50%";
+    delBtn.style.cursor = "pointer";
+    delBtn.style.width = "25px";
+    delBtn.style.height = "25px";
+    delBtn.style.fontSize = "14px";
+    delBtn.style.display = "inline-flex";
+    delBtn.style.alignItems = "center";
+    delBtn.style.justifyContent = "center";
 
     delBtn.onclick = () => {
       todos.delete(t);
@@ -122,7 +121,7 @@ delBtn.style.justifyContent = "center";
 function logout() {
   currentUser = null;
   saveCurrentUser();
-  todos.clear();
+//   todos.clear();
   saveTodos();
   showLogin();
 }
@@ -147,7 +146,7 @@ function showDashboard() {
   renderTodos();
 }
 
-// --- Auto-load state on refresh ---
+// --- Auto-load when page opens ---
 window.onload = () => {
   if (currentUser) {
     document.getElementById("user").innerText = currentUser;
